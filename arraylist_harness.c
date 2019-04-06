@@ -17,6 +17,9 @@ static char* ADD_ITEMS[] = {"0","1","2","3","4","5","6","7","8","9"};
 static char* SET_ITEMS[] = {"9","1","2","3","4","5","6","7","8","0"};
 static char* REVERSED_ITEMS[] = {"9","8","7","6","5","4","3","2","1","0"};
 
+/**
+ * Create a good array and a bad array.
+ */
 static void TEST_CREATE()
 {
 	VERBOSE_FUNC_START;
@@ -33,6 +36,7 @@ static void TEST_CREATE()
 	ArrayList bad = ArrayList_create(BAD_SIZE);
 	assert(bad == NULL);
 
+	VERBOSE_TESTS_SUCCESS;
 	VERBOSE_FUNC_END;
 }
 
@@ -56,9 +60,11 @@ static void TEST_ADD()
 		if (n >= BUFFER) assert(list->buffer == BUFFER*2);
 	}
 
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
 	VERBOSE_FUNC_END;
 }
-
 
 int main(int argc, char** argv)
 {
