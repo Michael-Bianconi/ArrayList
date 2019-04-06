@@ -26,7 +26,7 @@ void ArrayList_add(ArrayList list, char* item)
 	list->items[list->size] = data;
 	list->size++;
 
-	VERBOSE_MSG("added %s\n",data);
+	VERBOSE_MSGARGS("added %s\n",data);
 	VERBOSE_FUNC_END;
 }
 
@@ -34,7 +34,7 @@ void ArrayList_add(ArrayList list, char* item)
 void ArrayList_addAll(ArrayList list, int argc, ...)
 {
 	VERBOSE_FUNC_START;
-	VERBOSE_MSG("adding %d items\n", argc);
+	VERBOSE_MSGARGS("adding %d items\n", argc);
 
 
 	// initialize variable arguments list
@@ -68,7 +68,7 @@ void ArrayList_addArray(ArrayList dest, size_t n, char** items)
 void ArrayList_addList(ArrayList dest, ArrayList src)
 {
 	VERBOSE_FUNC_START;
-	VERBOSE_MSG("adding %lu items\n", src->size);
+	VERBOSE_MSGARGS("adding %lu items\n", src->size);
 
 	for (size_t i = 0; i < src->size; i++)
 	{
@@ -101,7 +101,7 @@ ArrayList ArrayList_create(size_t size)
 	// Size cannot be 0
 	if (size == 0)
 	{
-		VERBOSE_ERR("ERROR: cannot create ArrayList of size %lu\n",size);
+		VERBOSE_ERRARGS("ERROR: cannot create ArrayList of size %lu\n", size);
 		return NULL;
 	}
 
@@ -119,7 +119,7 @@ ArrayList ArrayList_create(size_t size)
 void ArrayList_expand(ArrayList list, size_t amount)
 {
 	VERBOSE_FUNC_START;
-	VERBOSE_MSG("expanding buffer from %lu to %lu\n",
+	VERBOSE_MSGARGS("expanding buffer from %lu to %lu\n",
 		list->buffer, list->buffer + amount);
 
 	list->buffer += amount;
@@ -136,7 +136,7 @@ void ArrayList_free(ArrayList list)
 	// Free all items held by the list
 	for (size_t i = 0; i < list->size; i++)
 	{
-		VERBOSE_MSG("freeing list[%lu]: %s\n", i, list->items[i]);
+		VERBOSE_MSGARGS("freeing list[%lu]: %s\n", i, list->items[i]);
 		free(list->items[i]);
 	}
 
@@ -157,11 +157,11 @@ char* ArrayList_get(ArrayList list, size_t n)
 	// Index out of bounds
 	if (n >= list->size)
 	{
-		VERBOSE_ERR("index %lu out of bounds\n", n);
+		VERBOSE_ERRARGS("index %lu out of bounds\n", n);
 		return NULL;
 	}
 
-	VERBOSE_MSG("retrieved list[%lu]: %s\n", n, list->items[n]);
+	VERBOSE_MSGARGS("retrieved list[%lu]: %s\n", n, list->items[n]);
 	VERBOSE_FUNC_END;
 
 	return list->items[n];
@@ -186,7 +186,7 @@ void ArrayList_print(ArrayList list)
 ArrayList ArrayList_range(ArrayList list, size_t start, size_t end)
 {
 	VERBOSE_FUNC_START;
-	VERBOSE_MSG("selecting range from %lu to %lu\n", start, end);
+	VERBOSE_MSGARGS("selecting range from %lu to %lu\n", start, end);
 
 	ArrayList sublist = ArrayList_create(list->size);
 
@@ -208,11 +208,11 @@ void ArrayList_remove(ArrayList list, size_t n)
 
 	if (n >= list->size)
 	{
-		VERBOSE_ERR("index %lu out of bounds\n", n);
+		VERBOSE_ERRARGS("index %lu out of bounds\n", n);
 		return;
 	}
 
-	VERBOSE_MSG("removing list[%lu]: %s\n", n, list->items[n]);
+	VERBOSE_MSGARGS("removing list[%lu]: %s\n", n, list->items[n]);
 
 	free(list->items[n]);
 
@@ -236,7 +236,7 @@ void ArrayList_reverse(ArrayList list)
 
 	for (size_t i = 0; i < list->size/2; i++)
 	{
-		VERBOSE_MSG("reversing %s and %s\n",
+		VERBOSE_MSGARGS("reversing %s and %s\n",
 			list->items[i], list->items[list->size-1-i]);
 
 		// Swap the two items
@@ -256,7 +256,7 @@ void ArrayList_set(ArrayList list, char* item, size_t n)
 	// index out of bounds
 	if (n >= list->size)
 	{
-		VERBOSE_ERR("index %lu out of bounds\n", n);
+		VERBOSE_ERRARGS("index %lu out of bounds\n", n);
 		return;
 	}
 
@@ -264,7 +264,7 @@ void ArrayList_set(ArrayList list, char* item, size_t n)
 	list->items[n] = realloc(list->items[n], strlen(item) + 1);
 	strcpy(list->items[n], item);
 
-	VERBOSE_MSG("set list[%lu] to %s\n", n, item);
+	VERBOSE_MSGARGS("set list[%lu] to %s\n", n, item);
 	VERBOSE_FUNC_END;
 }
 
@@ -272,7 +272,7 @@ void ArrayList_set(ArrayList list, char* item, size_t n)
 void ArrayList_trim(ArrayList list)
 {
 	VERBOSE_FUNC_START;
-	VERBOSE_MSG("trimming buffer from %lu to %lu\n",
+	VERBOSE_MSGARGS("trimming buffer from %lu to %lu\n",
 		list->buffer, list->size + 1);
 
 	list->buffer = list->size  + 1;
