@@ -24,6 +24,5 @@ int main(int argc, char** argv)
 	(void) argv;
 
 	ArrayList list = ArrayList_create(5);
-	ArrayList_setVerbose(list, 1);
 	ArrayList_addAll(list, 2, "hello", "world");
 }

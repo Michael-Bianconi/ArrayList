@@ -19,9 +19,6 @@ struct ArrayList_s
 
 	/** The data held by this ArrayList. */
 	char** items;
-
-	/** Operations performed on this list will be printed. */
-	unsigned short __verbose__;
 };
 
 typedef struct ArrayList_s* ArrayList;
@@ -120,13 +117,6 @@ char* ArrayList_get(ArrayList list, size_t n);
 
 
 /**
- * @param List to check.
- * @return Returns non-zero if enabled, 0 otherwise.
- */
-unsigned short ArrayList_isVerbose(ArrayList list);
-
-
-/**
  * Print the contents of the ArrayList.
  *
  * @param list ArrayList to print.
@@ -177,16 +167,6 @@ void ArrayList_reverse(ArrayList list);
  * @param n N'th index.
  */
 void ArrayList_set(ArrayList list, char* item, size_t n);
-
-
-/**
- * Enables verbose mode. Functions will print out operations
- * as they are performed.
- *
- * @param list List to enable verbose mode on.
- * @param mode 1 to enable, 0 to disable.
- */
-void ArrayList_setVerbose(ArrayList list, unsigned short mode);
 
 
 /**
