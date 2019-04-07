@@ -233,6 +233,88 @@ static void TEST_RANGE()
 }
 
 
+static void TEST_REMOVE()
+{
+	ArrayList list = ArrayList_create(10);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+
+	assert(list->size == 10);
+
+	for (size_t n = 0; n < list->size-1; n++)
+	{
+		ArrayList_remove(list, 0);
+		assert(list->size == 10 - n - 1);
+		assert(!strcmp(list->items[0],ADD_ITEMS[n+1]));
+	}
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_REVERSE()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(10);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 10);
+	ArrayList_reverse(list);
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		assert(!strcmp(list->items[n], ADD_ITEMS[list->size-n-1]));
+	}
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_SET()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(10);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 10);
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		ArrayList_set(list, "0", n);
+		assert(!strcmp(list->items[n], "0"));
+	}
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_TRIM()
+{
+	VERBOSE_FUNC_START;
+
+	const size_t buffer = 7;
+	ArrayList list = ArrayList_create(buffer);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+
+	assert(list->size == 10);
+	assert(list->buffer == buffer*2);
+	ArrayList_trim(list);
+	assert(list->buffer == 11);
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
 int main(int argc, char** argv)
 {
 	(void) argc;
@@ -247,5 +329,9 @@ int main(int argc, char** argv)
 	TEST_EXPAND();
 	TEST_GET();
 	TEST_RANGE();
+	TEST_REMOVE();
+	TEST_REVERSE();
+	TEST_SET();
+	TEST_TRIM();
 
 }

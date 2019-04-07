@@ -170,6 +170,14 @@ void ArrayList_set(ArrayList list, char* item, size_t n);
 
 
 /**
+ * Sorts the list lexigraphically, in-place.
+ *
+ * @param list List to sort.
+ */
+void ArrayList_sort(ArrayList list);
+
+
+/**
  * Trims unneeded memory space from the ArrayList's buffer.
  * Use if the size of the list decreased dramatically.
  * Reduces buffer to current list size + 1.

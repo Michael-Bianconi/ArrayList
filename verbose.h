@@ -40,8 +40,8 @@
 	#define VERBOSE_ERR(x) fprintf(stderr, "%s(): ",__func__); fprintf(stderr, x);
 	#define VERBOSE_ERRARGS(x,...) fprintf(stderr, "%s(): ",__func__); fprintf(stderr, x, __VA_ARGS__);
 #else
-	#define VERBOSE_ERR
-	#define VERBOSE_ERRARGS
+	#define VERBOSE_ERR(x)
+	#define VERBOSE_ERRARGS(x,...)
 #endif
 
 /** Used for unit testing */
