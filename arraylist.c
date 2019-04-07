@@ -116,6 +116,21 @@ ArrayList ArrayList_create(size_t size)
 }
 
 
+ArrayList ArrayList_createFromArray(size_t n, char** array)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("adding first %lu items from array\n", n);
+
+	// always allocate space for at least one item
+	ArrayList list = ArrayList_create(n==0 ? 1 : n);
+	ArrayList_addArray(list, n, array);
+
+	VERBOSE_FUNC_END;
+
+	return list;
+}
+
+
 unsigned short ArrayList_equals(ArrayList a, ArrayList b)
 {
 	VERBOSE_FUNC_START;

@@ -134,9 +134,6 @@ static void TEST_COPY()
 }
 
 
-/**
- * Create a good array and a bad array.
- */
 static void TEST_CREATE()
 {
 	VERBOSE_FUNC_START;
@@ -152,6 +149,31 @@ static void TEST_CREATE()
 
 	ArrayList bad = ArrayList_create(BAD_SIZE);
 	assert(bad == NULL);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_CREATE_FROM_ARRAY()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList empty = ArrayList_createFromArray(0, ADD_ITEMS);
+	assert(empty->size == 0);
+	assert(empty->buffer == 1);
+	ArrayList_free(empty);
+
+	ArrayList list = ArrayList_createFromArray(10, ADD_ITEMS);
+	assert(list->size == 10);
+	assert(list->buffer == 10);
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		assert(!strcmp(list->items[n], ADD_ITEMS[n]));
+	}
+
+	ArrayList_free(list);
 
 	VERBOSE_TESTS_SUCCESS;
 	VERBOSE_FUNC_END;
@@ -437,10 +459,10 @@ static void TEST_TRIM()
 	VERBOSE_FUNC_END;
 }
 
-int main(int argc, char** argv)
+static void ARRAYLIST_UNIT_TESTING()
 {
-	(void) argc;
-	(void) argv;
+	VERBOSE_FUNC_START;
+	VERBOSE_TESTS("beginning unit testing\n");
 
 	TEST_ADD();
 	TEST_ADDALL();
@@ -448,6 +470,7 @@ int main(int argc, char** argv)
 	TEST_ADDLIST();
 	TEST_COPY();
 	TEST_CREATE();
+	TEST_CREATE_FROM_ARRAY();
 	TEST_EQUALS();
 	TEST_EXPAND();
 	TEST_GET();
@@ -460,4 +483,15 @@ int main(int argc, char** argv)
 	TEST_SHUFFLE();
 	TEST_SWAP();
 	TEST_TRIM();
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+int main(int argc, char** argv)
+{
+	(void) argc;
+	(void) argv;
+
+	ARRAYLIST_UNIT_TESTING();
 }

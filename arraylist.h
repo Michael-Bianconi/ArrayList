@@ -88,6 +88,17 @@ ArrayList ArrayList_create(size_t size);
 
 
 /**
+ * Takes the first N items in the array and adds them to
+ * a newly created list.
+ *
+ * @param n Number of items to add (must be <= array size).
+ * @param array Array to add from.
+ * @return Returns newly created list.
+ */
+ArrayList ArrayList_createFromArray(size_t n, char** array);
+
+
+/**
  * Checks if each item is the same across lists. Does not
  * check buffer size.
  *
