@@ -375,6 +375,31 @@ static void TEST_REMOVE()
 }
 
 
+static void TEST_REMOVE_ALL_MATCHES()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(30);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 30);
+	ArrayList_removeAllMatches(list, "5");
+	assert(list->size == 27);
+	for (size_t n = 0; n < list->size; n++)
+	{
+		assert(strcmp(list->items[n], "5"));
+	}
+	ArrayList_removeAllMatches(list, "a");
+	assert(list->size == 27);
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
 static void TEST_REVERSE()
 {
 	VERBOSE_FUNC_START;
@@ -502,7 +527,7 @@ static void TEST_TRIM()
 static void ARRAYLIST_UNIT_TESTING()
 {
 	VERBOSE_FUNC_START;
-	VERBOSE_TESTS("beginning unit testing\n");
+	VERBOSE_TESTS("begin unit testing\n");
 
 	TEST_ADD();
 	TEST_ADDALL();
@@ -519,6 +544,7 @@ static void ARRAYLIST_UNIT_TESTING()
 	TEST_INSERT();
 	TEST_RANGE();
 	TEST_REMOVE();
+	TEST_REMOVE_ALL_MATCHES();
 	TEST_REVERSE();
 	TEST_SORT();
 	TEST_SET();

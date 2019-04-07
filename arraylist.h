@@ -203,6 +203,15 @@ void ArrayList_remove(ArrayList list, size_t n);
 
 
 /**
+ * Remove all items from the list that match the given item.
+ *
+ * @param list List to alter.
+ * @param match Item to match.
+ */
+void ArrayList_removeAllMatches(ArrayList list, char* match);
+
+
+/**
  * Reverse all items in the list.
  *
  * @param list List to reverse.

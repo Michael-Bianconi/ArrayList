@@ -342,6 +342,22 @@ void ArrayList_remove(ArrayList list, size_t n)
 }
 
 
+void ArrayList_removeAllMatches(ArrayList list, char* match)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("removing all instances of %s\n",match);
+
+	size_t n = 0;
+	while (n < list->size)
+	{
+		if (!strcmp(list->items[n], match)) ArrayList_remove(list, n);
+		else n++;
+	}
+
+	VERBOSE_FUNC_END;
+}
+
+
 void ArrayList_reverse(ArrayList list)
 {
 	VERBOSE_FUNC_START;
