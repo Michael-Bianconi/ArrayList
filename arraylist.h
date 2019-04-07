@@ -9,6 +9,10 @@
 #include <stdlib.h>
 
 // STRUCT DEFINITION ==========================================================
+
+/**
+ * ArrayList_s is a dynamically-resizing array of strings.
+ */
 struct ArrayList_s
 {
 	/** The current max elements that can be in memory. */
