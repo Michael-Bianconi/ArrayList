@@ -10,13 +10,7 @@
 #include <string.h>
 #include <assert.h>
 
-static const int BAD_ARRAYSIZE = 0;
-static const int START_ARRAYSIZE = 7;
-static const unsigned int NUM_ITEMS = 10;
 static char* ADD_ITEMS[] = {"0","1","2","3","4","5","6","7","8","9"};
-static char* SET_ITEMS[] = {"9","1","2","3","4","5","6","7","8","0"};
-static char* REVERSED_ITEMS[] = {"9","8","7","6","5","4","3","2","1","0"};
-
 
 static void TEST_ADD()
 {
@@ -153,7 +147,7 @@ static void TEST_CREATE()
 	ArrayList good = ArrayList_create(GOOD_SIZE);
 	assert(good != NULL);
 	assert(good->size == 0);
-	assert(good->buffer = sizeof(void*) * GOOD_SIZE);
+	assert(good->buffer == GOOD_SIZE);
 	ArrayList_free(good);
 
 	ArrayList bad = ArrayList_create(BAD_SIZE);
@@ -183,6 +177,62 @@ static void TEST_EXPAND()
 }
 
 
+static void TEST_GET()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(5);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+
+	assert(list->size == 10);
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		assert(!strcmp(ADD_ITEMS[n], ArrayList_get(list, n)));
+	}
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_RANGE()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList src = ArrayList_create(10);
+	ArrayList_addArray(src, 10, ADD_ITEMS);
+	assert(src->size == 10);
+
+	ArrayList dest = ArrayList_range(src, 2, 8);
+	assert(dest->size == 6);
+	for (size_t n = 0; n < dest->size; n++)
+	{
+		assert(!strcmp(src->items[n+2], dest->items[n]));
+	}
+	ArrayList_free(dest);
+
+	dest = ArrayList_range(src, 5, 2);
+	assert(dest->size == 0);
+	ArrayList_free(dest);
+
+	dest = ArrayList_range(src, 5, 100);
+	assert(dest->size == 5);
+	for (size_t n = 0; n < dest->size; n++)
+	{
+		assert(!strcmp(src->items[n+5], dest->items[n]));
+	}
+	ArrayList_free(dest);
+
+	ArrayList_free(src);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
 int main(int argc, char** argv)
 {
 	(void) argc;
@@ -195,5 +245,7 @@ int main(int argc, char** argv)
 	TEST_COPY();
 	TEST_CREATE();
 	TEST_EXPAND();
+	TEST_GET();
+	TEST_RANGE();
 
 }

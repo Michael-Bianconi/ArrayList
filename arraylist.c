@@ -42,7 +42,7 @@ void ArrayList_addAll(ArrayList list, int argc, ...)
 	va_start(valist, argc);
 
 	// add each to the list
-	for (size_t i = 0; i < argc; i++)
+	for (int i = 0; i < argc; i++)
 	{
 		ArrayList_add(list, va_arg(valist, char*));
 	}
