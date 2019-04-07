@@ -196,6 +196,38 @@ char* ArrayList_get(ArrayList list, size_t n)
 }
 
 
+void ArrayList_insert(ArrayList list, char* item, size_t idx)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("inserting %s at %lu\n",item,idx);
+
+	// index out of bounds (may be in range [0,list->size])
+	if (idx > list->size)
+	{
+		VERBOSE_ERRARGS("index %lu out of bounds\n",idx);
+		return;
+	}
+
+	// new item will exceed memory allocation
+	if (list->size == list->buffer) ArrayList_expand(list, list->buffer);
+
+	char* copy = malloc(strlen(item)+1);
+	strcpy(copy, item);
+
+	// shift items up
+	for (size_t n = list->size-1; n >= idx; n--)
+	{
+		list->items[n+1] = list->items[n];
+	}
+
+	// insert item
+	list->items[idx] = copy;
+	list->size++;
+
+	VERBOSE_FUNC_END;
+}
+
+
 void ArrayList_print(ArrayList list)
 {
 	VERBOSE_FUNC_START;
@@ -275,29 +307,6 @@ void ArrayList_reverse(ArrayList list)
 		char* temp = list->items[i];
 		list->items[i] = list->items[list->size-1-i];
 		list->items[list->size-1-i] = temp;
-	}
-
-	VERBOSE_FUNC_END;
-}
-
-
-void ArrayList_selectionSort(ArrayList list)
-{
-	VERBOSE_FUNC_START;
-	VERBOSE_MSG("sorting list");
-
-	for (size_t start = 0; start < list->size-1; start++)
-	{
-		size_t minIndex = start;
-		for (size_t end = start+1; end < list->size; end++)
-		{
-			if (strcmp(list->items[minIndex], list->items[end]) > 0)
-			{
-				minIndex = end;
-			}
-		}
-
-		ArrayList_swap(list, start, minIndex);
 	}
 
 	VERBOSE_FUNC_END;

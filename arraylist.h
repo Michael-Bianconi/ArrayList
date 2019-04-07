@@ -128,6 +128,17 @@ char* ArrayList_get(ArrayList list, size_t n);
 
 
 /**
+ * Inserts the item into the array and shifts
+ * all further items up by 1.
+ *
+ * @param list List to alter.
+ * @param item Item to add.
+ * @param size_t idx Position to insert.
+ */
+void ArrayList_insert(ArrayList list, char* item, size_t idx);
+
+
+/**
  * Print the contents of the ArrayList.
  *
  * @param list ArrayList to print.

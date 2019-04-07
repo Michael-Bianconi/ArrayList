@@ -217,6 +217,46 @@ static void TEST_GET()
 }
 
 
+static void TEST_INSERT()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(10);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 10);
+	assert(list->buffer == 10);
+
+	ArrayList_insert(list, "new", 5);
+	assert(list->size == 11);
+	assert(list->buffer == 20);
+	assert(!strcmp(list->items[5], "new"));
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		if (n != 5)
+		{
+			assert(!strcmp(list->items[n],
+				n < 5 ? ADD_ITEMS[n] : ADD_ITEMS[n-1]));
+		}
+	}
+
+	ArrayList_insert(list, "bad", 13);
+	assert(list->size == 11);
+	assert(list->buffer == 20);
+
+	ArrayList_insert(list, "end", 11);
+	assert(list->size == 12);
+	assert(list->buffer == 20);
+
+	assert(!strcmp(list->items[11],"end"));
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
 static void TEST_RANGE()
 {
 	VERBOSE_FUNC_START;
@@ -317,9 +357,6 @@ static void TEST_SORT()
 }
 
 
-
-
-
 static void TEST_SET()
 {
 	VERBOSE_FUNC_START;
@@ -414,6 +451,7 @@ int main(int argc, char** argv)
 	TEST_EQUALS();
 	TEST_EXPAND();
 	TEST_GET();
+	TEST_INSERT();
 	TEST_RANGE();
 	TEST_REMOVE();
 	TEST_REVERSE();
