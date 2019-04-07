@@ -158,6 +158,25 @@ static void TEST_CREATE()
 }
 
 
+static void TEST_EQUALS()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list1 = ArrayList_create(10);
+	ArrayList_addArray(list1, 10, ADD_ITEMS);
+	ArrayList list2 = ArrayList_copy(list1);
+	assert(ArrayList_equals(list1, list2));
+	ArrayList_reverse(list2);
+	assert(!ArrayList_equals(list1, list2));
+
+	ArrayList_free(list1);
+	ArrayList_free(list2);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
 static void TEST_EXPAND()
 {
 	VERBOSE_FUNC_START;
@@ -275,6 +294,32 @@ static void TEST_REVERSE()
 }
 
 
+static void TEST_SORT()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(5);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 10);
+
+	ArrayList_shuffle(list);
+	ArrayList_sort(list);
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		assert(!strcmp(list->items[n], ADD_ITEMS[n]));
+	}
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+
+
+
 static void TEST_SET()
 {
 	VERBOSE_FUNC_START;
@@ -288,6 +333,46 @@ static void TEST_SET()
 		ArrayList_set(list, "0", n);
 		assert(!strcmp(list->items[n], "0"));
 	}
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_SHUFFLE()
+{
+
+	// IMPOSSIBLE TO FULLY TEST THIS FUNCTION
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(10);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 10);
+	ArrayList_shuffle(list);
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_SWAP()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_create(10);
+	ArrayList_addArray(list, 10, ADD_ITEMS);
+	assert(list->size == 10);
+
+	ArrayList_swap(list, 0, 100); // bad swap
+	ArrayList_swap(list, 100, 0); // bad swap
+	ArrayList_swap(list, 100, 100); // bad swap
+
+	ArrayList_swap(list, 0, 9);
+	assert(!strcmp(list->items[0], ADD_ITEMS[9]));
+	assert(!strcmp(list->items[9], ADD_ITEMS[0]));
 
 	ArrayList_free(list);
 
@@ -326,12 +411,15 @@ int main(int argc, char** argv)
 	TEST_ADDLIST();
 	TEST_COPY();
 	TEST_CREATE();
+	TEST_EQUALS();
 	TEST_EXPAND();
 	TEST_GET();
 	TEST_RANGE();
 	TEST_REMOVE();
 	TEST_REVERSE();
+	TEST_SORT();
 	TEST_SET();
+	TEST_SHUFFLE();
+	TEST_SWAP();
 	TEST_TRIM();
-
 }

@@ -88,6 +88,17 @@ ArrayList ArrayList_create(size_t size);
 
 
 /**
+ * Checks if each item is the same across lists. Does not
+ * check buffer size.
+ *
+ * @param a First list.
+ * @param b Second list.
+ * @return returns 1 if equal, 0 otherwise.
+ */
+unsigned short ArrayList_equals(ArrayList a, ArrayList b);
+
+
+/**
  * Increases the size of the ArrayList's buffer. Called automatically
  * when adding an item that exceeds the allocated memory.
  *
@@ -170,11 +181,30 @@ void ArrayList_set(ArrayList list, char* item, size_t n);
 
 
 /**
- * Sorts the list lexigraphically, in-place.
+ * Shuffles the ArrayList using a Fisher-Yates shuffle.
+ *
+ * @param list List to shuffle.
+ */
+void ArrayList_shuffle(ArrayList list);
+
+
+/**
+ * Sorts the list lexigraphically, in-place,
+ * using quick sort, in ascending order.
  *
  * @param list List to sort.
  */
 void ArrayList_sort(ArrayList list);
+
+
+/**
+ * Swaps the two given elements with each other.
+ *
+ * @param list List to alter.
+ * @param i First index.
+ * @param j Second index.
+ */
+void ArrayList_swap(ArrayList list, size_t i, size_t j);
 
 
 /**

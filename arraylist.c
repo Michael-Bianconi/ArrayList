@@ -116,6 +116,34 @@ ArrayList ArrayList_create(size_t size)
 }
 
 
+unsigned short ArrayList_equals(ArrayList a, ArrayList b)
+{
+	VERBOSE_FUNC_START;
+
+	// lists must be same size
+	if (a->size != b->size)
+	{
+		VERBOSE_MSG("lists not equal\n");
+		return 0;
+	}
+
+	// check each item
+	for (size_t n = 0; n < a->size; n++)
+	{
+		if (strcmp(a->items[n], b->items[n]))
+		{
+			VERBOSE_MSG("lists not equal\n");
+			return 0;
+		}
+	}
+
+	VERBOSE_MSG("lists are equal\n");
+	VERBOSE_FUNC_END;
+
+	return 1;
+}
+
+
 void ArrayList_expand(ArrayList list, size_t amount)
 {
 	VERBOSE_FUNC_START;
@@ -190,6 +218,7 @@ ArrayList ArrayList_range(ArrayList list, size_t start, size_t end)
 
 	ArrayList sublist = ArrayList_create(list->size);
 
+	// add everything within the range
 	while (start < end && start < list->size)
 	{
 		ArrayList_add(sublist, ArrayList_get(list, start));
@@ -206,6 +235,7 @@ void ArrayList_remove(ArrayList list, size_t n)
 {
 	VERBOSE_FUNC_START;
 
+	// index out of bounds
 	if (n >= list->size)
 	{
 		VERBOSE_ERRARGS("index %lu out of bounds\n", n);
@@ -214,8 +244,10 @@ void ArrayList_remove(ArrayList list, size_t n)
 
 	VERBOSE_MSGARGS("removing list[%lu]: %s\n", n, list->items[n]);
 
+	// free the removed item
 	free(list->items[n]);
 
+	// shift everything down to fill the gap
 	for (size_t i = n + 1; i < list->size; i++)
 	{
 		list->items[i-1] = list->items[i];
@@ -249,6 +281,29 @@ void ArrayList_reverse(ArrayList list)
 }
 
 
+void ArrayList_selectionSort(ArrayList list)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSG("sorting list");
+
+	for (size_t start = 0; start < list->size-1; start++)
+	{
+		size_t minIndex = start;
+		for (size_t end = start+1; end < list->size; end++)
+		{
+			if (strcmp(list->items[minIndex], list->items[end]) > 0)
+			{
+				minIndex = end;
+			}
+		}
+
+		ArrayList_swap(list, start, minIndex);
+	}
+
+	VERBOSE_FUNC_END;
+}
+
+
 void ArrayList_set(ArrayList list, char* item, size_t n)
 {
 	VERBOSE_FUNC_START;
@@ -269,13 +324,104 @@ void ArrayList_set(ArrayList list, char* item, size_t n)
 }
 
 
+void ArrayList_shuffle(ArrayList list)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSG("shuffling list");
+
+	// ASSUMES srand() has already been called!
+	for (size_t i = list->size-1; i > 0; i--) 
+    { 
+        // Pick a random index
+        size_t j = rand() % (i+1); 
+  
+        // swap
+        ArrayList_swap(list, i, j); 
+    }
+
+    VERBOSE_FUNC_END;
+}
+
+
+static size_t ArrayList_sortPartition(ArrayList list, size_t low, size_t high)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("pivoting on %lu and %lu\n", low, high);
+
+	char* pivot = list->items[high];
+	size_t i = low - 1;
+
+	for (size_t j = low; j <= high-1; j++)
+	{
+		if (strcmp(list->items[j], pivot) < 0)
+		{
+			i++;
+			ArrayList_swap(list,i,j);
+		}
+	}
+	ArrayList_swap(list, i+1, high);
+
+	VERBOSE_FUNC_END;
+	return i+1;
+}
+
+
+static void ArrayList_sortWithArgs(ArrayList list, size_t low, size_t high)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("sorting on %lu and %lu\n",low,high);
+
+	if (low < high)
+	{
+		size_t pivot = ArrayList_sortPartition(list, low, high);
+
+		ArrayList_sortWithArgs(list, low, pivot-1);
+		ArrayList_sortWithArgs(list, pivot+1, high);
+	}
+
+	VERBOSE_FUNC_END;
+}
+
+
+void ArrayList_sort(ArrayList list)
+{
+	VERBOSE_FUNC_START;
+	ArrayList_sortWithArgs(list, 0, list->size-1);
+	VERBOSE_FUNC_END;
+}
+
+
+void ArrayList_swap(ArrayList list, size_t i, size_t j)
+{
+	VERBOSE_FUNC_START;
+
+	// Indices must be within bounds
+	if (i >= list->size || j >= list->size)
+	{
+		VERBOSE_ERRARGS("indices out of bounds: %lu, %lu\n",i,j);
+		return;
+	}
+
+	// Swap list[i] and list[j]
+	char* a = list->items[i];
+	list->items[i] = list->items[j];
+	list->items[j] = a;
+
+	VERBOSE_MSGARGS("swapped %lu (%s) and %lu (%s)\n",
+					i, list->items[j], j, list->items[i]);
+	VERBOSE_FUNC_END;
+
+}
+
+
 void ArrayList_trim(ArrayList list)
 {
 	VERBOSE_FUNC_START;
 	VERBOSE_MSGARGS("trimming buffer from %lu to %lu\n",
 		list->buffer, list->size + 1);
 
-	list->buffer = list->size  + 1;
+	// trim the buffer down to size + 1
+	list->buffer = list->size + 1;
 	list->items = realloc(list->items, list->buffer * sizeof(char*));
 	VERBOSE_FUNC_END;
 }
