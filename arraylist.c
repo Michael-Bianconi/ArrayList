@@ -79,6 +79,42 @@ void ArrayList_addList(ArrayList dest, ArrayList src)
 }
 
 
+void ArrayList_clear(ArrayList list)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("clearing %lu items\n", list->size);
+
+	// remove the first element from list until list is empty.
+	while (list->size != 0)
+	{
+		ArrayList_remove(list, 0);
+	}
+
+	VERBOSE_FUNC_END;
+}
+
+
+unsigned short ArrayList_contains(ArrayList list, char* item)
+{
+	VERBOSE_FUNC_START;
+	VERBOSE_MSGARGS("searching for %s\n", item);
+
+	// check each item
+	for (size_t n = 0; n < list->size; n++)
+	{
+		if (!strcmp(list->items[n], item)) {
+			VERBOSE_MSGARGS("found out %lu\n", n);
+			return 1;
+		}
+	}
+
+	VERBOSE_MSG("not found\n");
+	VERBOSE_FUNC_END;
+
+	return 0;
+}
+
+
 ArrayList ArrayList_copy(ArrayList list)
 {
 	VERBOSE_FUNC_START;

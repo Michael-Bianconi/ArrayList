@@ -111,6 +111,46 @@ static void TEST_ADDLIST()
 }
 
 
+static void TEST_CLEAR()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_createFromArray(10, ADD_ITEMS);
+	assert(list->size == 10);
+	assert(list->buffer == 10);
+	ArrayList_clear(list);
+	assert(list->size == 0);
+	assert(list->buffer == 10);
+	ArrayList_trim(list);
+	assert(list->buffer == 1);
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
+static void TEST_CONTAINS()
+{
+	VERBOSE_FUNC_START;
+
+	ArrayList list = ArrayList_createFromArray(10, ADD_ITEMS);
+	assert(list->size == 10);
+
+	for (size_t n = 0; n < list->size; n++)
+	{
+		assert(ArrayList_contains(list, ADD_ITEMS[n]));
+	}
+
+	assert(!ArrayList_contains(list, "a"));
+
+	ArrayList_free(list);
+
+	VERBOSE_TESTS_SUCCESS;
+	VERBOSE_FUNC_END;
+}
+
+
 static void TEST_COPY()
 {
 	VERBOSE_FUNC_START;
@@ -468,6 +508,8 @@ static void ARRAYLIST_UNIT_TESTING()
 	TEST_ADDALL();
 	TEST_ADDARRAY();
 	TEST_ADDLIST();
+	TEST_CLEAR();
+	TEST_CONTAINS();
 	TEST_COPY();
 	TEST_CREATE();
 	TEST_CREATE_FROM_ARRAY();

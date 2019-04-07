@@ -67,6 +67,24 @@ void ArrayList_addList(ArrayList dest, ArrayList src);
 
 
 /**
+ * Removes all items from the list.
+ *
+ * @param list List to alter.
+ */
+void ArrayList_clear(ArrayList list);
+
+
+/**
+ * Checks if the given string exists in the list.
+ *
+ * @param list List to check.
+ * @param item Item to search for.
+ * @return Returns 1 if present, 0 otherwise.
+ */
+unsigned short ArrayList_contains(ArrayList list, char* item);
+
+
+/**
  * Construct a new ArrayList with the same data as
  * the given ArrayList.
  *
